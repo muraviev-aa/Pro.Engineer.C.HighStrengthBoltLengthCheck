@@ -50,3 +50,6 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+/high_bolt_check/cmake-build-debug
+/high_bolt_check/.idea
+high_bolt_check/CMakeLists.txt
