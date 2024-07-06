@@ -103,3 +103,50 @@ void print_input_data_52644(int *arr)
         printf("\t\t!!! This bolt length is not recommended !!!\n");
     STR_LINE;
 }
+
+// Проверка 1: резьба в детали (превышение 0.5t крайней к гайке детали)
+// Проверка 2: резьба в шайбе (возможность закрутить гайку)
+int bolt_check_thread_52644(bolt info[], int number, int arr[])
+{
+    double thread_result;
+    int thread_length;
+    for (int i = 0; i < number; i++)
+    {
+        if (info[i].bolt_name == arr[0])
+        {
+            if (arr[1] > 150)
+                thread_length = info[i].thread_length_add1;
+            else
+                thread_length = info[i].thread_length;
+
+            thread_result = arr[4] * info[i].washer_thickness + arr[2] + arr[3] - arr[1] + thread_length;
+            printf("\t*** GOST DATA (52644-2006, 52645-2006, 52646-2006) ***\n");
+            printf("%s%12s%12s%14s%10s\n", "WashThick", "NutHeight", "ThreadLen", "ThreadPitch", "Chamfer");
+            printf("%8.1f%12.1f%12d%14.1f%10.1f\n", info[i].washer_thickness, info[i].nut_height,
+                   thread_length, info[i].thread_pitch, info[i].chamfer);
+            STR_LINE;
+            printf("\t\t\t*** THREAD POSITION ***\n");
+            if (thread_result > 0) // резьба в крайней детали
+            {
+                printf("Thread in detail %.1f ", fabs(thread_result));
+                if (thread_result > 0.5 * arr[3])
+                {
+                    printf("!!! The thread goes into the part !!!");
+                    return 1;
+                }
+            } else if (thread_result < 0) // резьба в шайбе
+            {
+                printf("Thread in washer %.1f ", fabs(thread_result));
+                if (fabs(thread_result) > arr[5] * info[i].washer_thickness)
+                {
+                    printf("!!! Do not tighten the nut !!!");
+                    return 2;
+                }
+            } else if (thread_result == 0) // резьба на границе деталей
+            {
+                printf("Thread at the interface between the part and the washer");
+            }
+        }
+    }
+    return 0;
+}

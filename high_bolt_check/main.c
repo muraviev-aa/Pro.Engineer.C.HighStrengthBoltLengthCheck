@@ -82,8 +82,9 @@ int main(int argc, char *argv[])
     open_file(&fptr, file_name);
     count = read_data_file(&fptr, info);
     fclose(fptr);
-    print(info, count);
-
+    //print(info, count);
+    if (flag_g == 1)
+        bolt_check_thread_52644(info, count, connect_package);
     free(info);
     return 0;
 }
