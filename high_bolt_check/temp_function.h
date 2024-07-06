@@ -1,5 +1,6 @@
 #ifndef HIGH_BOLT_CHECK_TEMP_FUNCTION_H
 #define HIGH_BOLT_CHECK_TEMP_FUNCTION_H
+
 #include <stdio.h>
 #include <stdint.h>
 #include <stdlib.h>
@@ -29,6 +30,13 @@ typedef struct
 */
 extern int connect_package[7];
 
+// Флаг ГОСТ
+extern int flag_g;
+
+// Массив под длины болтов 52644
+extern int bolt_length_52644[31];
+
+void print_input_data_52644(int *arr);
 void print_help(void);
 void print_info(void);
 int read_data_file(FILE **fptr, bolt info[]);

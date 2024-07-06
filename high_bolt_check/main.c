@@ -6,6 +6,13 @@
 
 int connect_package[7];
 
+int bolt_length_52644[31] = {40, 45, 50, 55, 60, 65, 70, 75, 80,
+                             85, 90, 95, 100, 105, 110, 115, 120,
+                             125, 130, 140, 150, 160, 170, 180,
+                             190, 200, 220, 240, 260, 280, 300};
+
+int flag_g;
+
 int main(int argc, char *argv[])
 {
     bolt *info = malloc(SIZE * sizeof(bolt));
@@ -14,7 +21,7 @@ int main(int argc, char *argv[])
     FILE *fptr;
     int rez, count;
     char *file_name;
-
+    // При запуске приложения без аргументов открывается справка
     if (argc == 1)
     {
         print_info();
@@ -31,6 +38,10 @@ int main(int argc, char *argv[])
             case 'f':
                 file_name = optarg;
                 printf("File name is %s.\n", file_name);
+                if (strcmp(file_name, "52644.csv") == 0)
+                    flag_g = 1;
+                else if (strcmp(file_name, "32484.3") == 0)
+                    flag_g = 2;
                 break;
             case 'm':
                 // Диаметр резьбовой части болта
@@ -66,6 +77,8 @@ int main(int argc, char *argv[])
         }
     }
 
+    if (flag_g == 1)
+        print_input_data_52644(connect_package);
     open_file(&fptr, file_name);
     count = read_data_file(&fptr, info);
     fclose(fptr);

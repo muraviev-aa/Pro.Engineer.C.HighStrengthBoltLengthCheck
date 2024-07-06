@@ -89,3 +89,17 @@ void print(bolt *arr, int size_struct)
                arr[i].thread_pitch,
                arr[i].chamfer);
 }
+
+// Печать входных данных для 52644
+void print_input_data_52644(int *arr)
+{
+    STR_LINE;
+    printf("\t\t\t*** ENTERED DATA ***\n");
+    printf("%s%12s%12s%15s%12s%12s%12s\n", "BoltDiam", "BoltLength", "ThickParts",
+           "ThickPartNut", "WasherHead", "WasherNut", "NumberNuts");
+    printf("%8d%12d%12d%15d%12d%12d%12d\n", arr[0], arr[1], arr[2], arr[3], arr[4], arr[5], arr[6]);
+    if (arr[1] == bolt_length_52644[11] || arr[1] == bolt_length_52644[13] ||
+        arr[1] == bolt_length_52644[15] || arr[1] == bolt_length_52644[17])
+        printf("\t\t!!! This bolt length is not recommended !!!\n");
+    STR_LINE;
+}
