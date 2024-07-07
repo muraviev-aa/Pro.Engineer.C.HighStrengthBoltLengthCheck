@@ -90,17 +90,20 @@ void print(bolt *arr, int size_struct)
                arr[i].chamfer);
 }
 
-// Печать входных данных для 52644
-void print_input_data_52644(int *arr)
+// Печать входных данных для ГОСТ 52644 и ГОСТ 32484.3
+void print_input_data(int *arr, int flag)
 {
     STR_LINE;
-    printf("\t\t\t*** ENTERED DATA ***\n");
+    printf("\t\t\t\t*** ENTERED DATA ***\n");
     printf("%s%12s%12s%15s%12s%12s%12s\n", "BoltDiam", "BoltLength", "ThickParts",
            "ThickPartNut", "WasherHead", "WasherNut", "NumberNuts");
     printf("%8d%12d%12d%15d%12d%12d%12d\n", arr[0], arr[1], arr[2], arr[3], arr[4], arr[5], arr[6]);
-    if (arr[1] == bolt_length_52644[11] || arr[1] == bolt_length_52644[13] ||
-        arr[1] == bolt_length_52644[15] || arr[1] == bolt_length_52644[17])
-        printf("\t\t!!! This bolt length is not recommended !!!\n");
+    if (flag == 1)
+    {
+        if (arr[1] == bolt_length_52644[11] || arr[1] == bolt_length_52644[13] ||
+            arr[1] == bolt_length_52644[15] || arr[1] == bolt_length_52644[17])
+            printf("\t\t!!! This bolt length is not recommended !!!\n");
+    }
     STR_LINE;
 }
 
@@ -120,7 +123,7 @@ int bolt_check_thread_52644(bolt info[], int number, int arr[])
                 fact_thread_length = info[i].thread_length;
 
             thread_result = arr[4] * info[i].washer_thickness + arr[2] + arr[3] - arr[1] + fact_thread_length;
-            printf("\t*** GOST DATA (52644-2006, 52645-2006, 52646-2006) ***\n");
+            printf("\t\t*** GOST DATA (52644-2006, 52645-2006, 52646-2006) ***\n");
             printf("%s%12s%12s%14s%10s\n", "WashThick", "NutHeight", "ThreadLen", "ThreadPitch", "Chamfer");
             printf("%8.1f%12.1f%12d%14.1f%10.1f\n", info[i].washer_thickness, info[i].nut_height,
                    fact_thread_length, info[i].thread_pitch, info[i].chamfer);

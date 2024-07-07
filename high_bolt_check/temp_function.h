@@ -5,7 +5,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <unistd.h>
-#define STR_LINE puts("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+#define STR_LINE puts("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
 
 typedef struct
 {
@@ -39,7 +39,7 @@ extern int bolt_length_52644[31];
 // Массив под длины болтов 32484.3
 extern int bolt_length_32484_3[31];
 
-void print_input_data_52644(int *arr);
+void print_input_data(int *arr, int flag);
 void print_help(void);
 void print_info(void);
 int read_data_file(FILE **fptr, bolt info[]);

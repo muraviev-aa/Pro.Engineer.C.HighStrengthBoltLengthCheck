@@ -44,7 +44,7 @@ int main(int argc, char *argv[])
                 printf("File name is %s.\n", file_name);
                 if (strcmp(file_name, "52644.csv") == 0)
                     flag_g = 1;
-                else if (strcmp(file_name, "32484.3") == 0)
+                else if (strcmp(file_name, "32484.3.csv") == 0)
                     flag_g = 2;
                 break;
             case 'm':
@@ -81,12 +81,11 @@ int main(int argc, char *argv[])
         }
     }
 
-    if (flag_g == 1)
-        print_input_data_52644(connect_package);
+    print_input_data(connect_package, flag_g);
     open_file(&fptr, file_name);
     count = read_data_file(&fptr, info);
     fclose(fptr);
-    //print(info, count);
+    print(info, count);
     if (flag_g == 1)
         bolt_check_thread_52644(info, count, connect_package);
     free(info);
