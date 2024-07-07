@@ -109,21 +109,21 @@ void print_input_data_52644(int *arr)
 int bolt_check_thread_52644(bolt info[], int number, int arr[])
 {
     double thread_result;
-    int thread_length;
+    int fact_thread_length;
     for (int i = 0; i < number; i++)
     {
         if (info[i].bolt_name == arr[0])
         {
             if (arr[1] > 150)
-                thread_length = info[i].thread_length_add1;
+                fact_thread_length = info[i].thread_length_add1;
             else
-                thread_length = info[i].thread_length;
+                fact_thread_length = info[i].thread_length;
 
-            thread_result = arr[4] * info[i].washer_thickness + arr[2] + arr[3] - arr[1] + thread_length;
+            thread_result = arr[4] * info[i].washer_thickness + arr[2] + arr[3] - arr[1] + fact_thread_length;
             printf("\t*** GOST DATA (52644-2006, 52645-2006, 52646-2006) ***\n");
             printf("%s%12s%12s%14s%10s\n", "WashThick", "NutHeight", "ThreadLen", "ThreadPitch", "Chamfer");
             printf("%8.1f%12.1f%12d%14.1f%10.1f\n", info[i].washer_thickness, info[i].nut_height,
-                   thread_length, info[i].thread_pitch, info[i].chamfer);
+                   fact_thread_length, info[i].thread_pitch, info[i].chamfer);
             STR_LINE;
             printf("\t\t\t*** THREAD POSITION ***\n");
             if (thread_result > 0) // резьба в крайней детали
