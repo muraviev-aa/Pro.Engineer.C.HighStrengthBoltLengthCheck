@@ -37,7 +37,7 @@ extern int flag_g;
 extern int bolt_length_52644[31];
 
 // Массив под длины болтов 32484.3
-extern int bolt_length_32484_3[31];
+extern int bolt_length_32484_3[23];
 
 void print_input_data(int *arr, int flag);
 void print_help(void);
