@@ -150,10 +150,10 @@ int bolt_check_thread(bolt info[], int number, int arr[], int flag)
                        fact_thread_length, info[i].thread_pitch, info[i].chamfer);
             }
             STR_LINE;
-            printf("\t\t\t*** THREAD POSITION ***\n");
+            printf("\t\t\t\t*** THREAD POSITION ***\n");
             if (thread_result > 0) // резьба в крайней детали
             {
-                printf("Thread in detail %.1f ", fabs(thread_result));
+                printf("\t\tThread in detail %.1f ", fabs(thread_result));
                 if (thread_result > 0.5 * arr[3])
                 {
                     printf("!!! The thread goes into the part !!!");
@@ -161,7 +161,7 @@ int bolt_check_thread(bolt info[], int number, int arr[], int flag)
                 }
             } else if (thread_result < 0) // резьба в шайбе
             {
-                printf("Thread in washer %.1f ", fabs(thread_result));
+                printf("\t\tThread in washer %.1f ", fabs(thread_result));
                 if (fabs(thread_result) > arr[5] * info[i].washer_thickness)
                 {
                     printf("!!! Do not tighten the nut !!!");
@@ -170,6 +170,30 @@ int bolt_check_thread(bolt info[], int number, int arr[], int flag)
             } else if (thread_result == 0) // резьба на границе деталей
             {
                 printf("Thread at the interface between the part and the washer");
+            }
+        }
+    }
+    return 0;
+}
+
+// Проверка 3: проверка длины конца болта (не менее одного полного витка резьбы + фаска)
+int bolt_tip_check(bolt info[], int number, int *arr)
+{
+    double bolt_tip;
+    printf("\n");
+    STR_LINE;
+    printf("\t\t\t\t*** BOLT TIP ***\n");
+    for (int i = 0; i < number; i++)
+    {
+        if (info[i].bolt_name == arr[0])
+        {
+            bolt_tip = arr[1] - info[i].washer_thickness * arr[4] - arr[2] - arr[3] -
+                       info[i].washer_thickness * arr[5] - 2 * info[i].nut_height;
+            printf("\t\t\t\tBolt tip is %.1f ", bolt_tip);
+            if (bolt_tip < info[i].thread_pitch + info[i].chamfer)
+            {
+                printf("!!! Short bolt tip !!!");
+                return 1;
             }
         }
     }

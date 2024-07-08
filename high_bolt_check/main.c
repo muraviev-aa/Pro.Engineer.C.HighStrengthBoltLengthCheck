@@ -87,6 +87,7 @@ int main(int argc, char *argv[])
     fclose(fptr);
     //print(info, count);
     bolt_check_thread(info, count, connect_package, flag_g);
+    bolt_tip_check(info, count, connect_package);
     free(info);
     return 0;
 }

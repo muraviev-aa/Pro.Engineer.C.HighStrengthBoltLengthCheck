@@ -48,6 +48,7 @@ void add_record(bolt info[], int number, unsigned int bolt_name, double washer_t
                 double nut_height, unsigned int thread_length, unsigned int thread_length_add1,
                 unsigned int thread_length_add2, double thread_pitch, double chamfer);
 int bolt_check_thread(bolt info[], int number, int arr[], int flag);
+int bolt_tip_check(bolt info[], int number, int *arr);
 void print(bolt *arr, int size_struct);
 
 #endif //HIGH_BOLT_CHECK_TEMP_FUNCTION_H
