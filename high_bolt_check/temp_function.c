@@ -178,14 +178,11 @@ int high_bolt_check_thread(bolt info[], int number, int arr[], int flag)
             {
                 printf("Thread in detail %.1f ", fabs(thread_result));
                 if (thread_result >= 2 * info[i].thread_pitch) // не менее двух витков с полным профилем
-                {
                     printf("More than two turns with full profile");
-                    return 1;
-                }
             } else if (thread_result < 0) // резьба в шайбе
             {
                 printf("!!! Invalid thread position !!! Thread in washer %.1f ", fabs(thread_result));
-                return 2;
+                return 1;
             } else if (thread_result == 0) // резьба на границе деталей
                 printf("!!! Invalid thread position !!! Thread at the interface between the part and the washer");
         }
@@ -194,8 +191,8 @@ int high_bolt_check_thread(bolt info[], int number, int arr[], int flag)
 }
 
 // Проверка 3: проверка длины конца болта (не менее одного полного витка резьбы + фаска)
-// для двух гаек
-int bolt_tip_check(bolt info[], int number, int *arr)
+// для одной и двух гаек
+int bolt_tip_check(bolt info[], int number, int *arr, int flag_n)
 {
     double bolt_tip;
     printf("\n");
@@ -206,7 +203,7 @@ int bolt_tip_check(bolt info[], int number, int *arr)
         if (info[i].bolt_name == arr[0])
         {
             bolt_tip = arr[1] - info[i].washer_thickness * arr[4] - arr[2] - arr[3] -
-                       info[i].washer_thickness * arr[5] - 2 * info[i].nut_height;
+                       info[i].washer_thickness * arr[5] - flag_n * info[i].nut_height;
             printf("Bolt tip is %.1f ", bolt_tip);
             if (bolt_tip < info[i].thread_pitch + info[i].chamfer)
             {
@@ -218,7 +215,7 @@ int bolt_tip_check(bolt info[], int number, int *arr)
     return 0;
 }
 
-// Печать результатов проверки
+// Печать результатов проверки (2 гайки)
 void print_result_check(int res1_2, int res3)
 {
     printf("\n");
@@ -240,6 +237,25 @@ void print_result_check(int res1_2, int res3)
     STR_LINE;
 }
 
+// Печать результатов проверки (1 гайка)
+void print_high_bolt_result_check(int res1, int res3)
+{
+    printf("\n");
+    STR_LINE;
+    printf("\t\t\t*** BOLT LENGTH CHECK RESULT ***\n");
+    printf("\t\t%18s%18s\n", "ThreadRequirement", "TipCheck");
+    if (res1 == 0 && res3 == 0)
+        printf("\t\t%18s%18s\n", "YES", "YES");
+    else if (res1 == 1 && res3 == 0)
+        printf("\t\t%18s%18s\n", "NO", "YES");
+    else if (res1 == 0 && res3 == 1)
+        printf("\t\t%18s%18s\n", "YES", "NO");
+    else if (res1 == 1 && res3 == 1)
+        printf("\t\t%18s%18s\n", "NO", "NO");
+    STR_LINE;
+}
+
+// Редактирование длины резьбы в зависимости от длины болта
 double print_data_thread_result(bolt info[], int number, int arr[], int flag, int i)
 {
     double thread_result;

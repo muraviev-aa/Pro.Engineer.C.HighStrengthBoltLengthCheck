@@ -51,10 +51,11 @@ void add_record(bolt info[], int number, unsigned int bolt_name, double washer_t
                 double nut_height, unsigned int thread_length, unsigned int thread_length_add1,
                 unsigned int thread_length_add2, double thread_pitch, double chamfer);
 int bolt_check_thread(bolt info[], int number, int arr[], int flag);
-int bolt_tip_check(bolt info[], int number, int *arr);
+int bolt_tip_check(bolt info[], int number, int *arr, int flag_n);
 int high_bolt_check_thread(bolt info[], int number, int arr[], int flag);
 void print_result_check(int res1_2, int res3);
 void print(bolt *arr, int size_struct);
 double print_data_thread_result(bolt info[], int number, int arr[], int flag, int i);
+void print_high_bolt_result_check(int res1, int res3);
 
 #endif //HIGH_BOLT_CHECK_TEMP_FUNCTION_H

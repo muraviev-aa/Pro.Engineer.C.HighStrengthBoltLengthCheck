@@ -91,11 +91,14 @@ int main(int argc, char *argv[])
     fclose(fptr);
     //print(info, count);
     if (flag_nut == 1)
+    {
         result1 = high_bolt_check_thread(info, count, connect_package, flag_g);
-    else if (flag_nut == 2)
+        result3 = bolt_tip_check(info, count, connect_package, flag_nut);
+        print_high_bolt_result_check(result1, result3);
+    } else if (flag_nut == 2)
     {
         result1_2 = bolt_check_thread(info, count, connect_package, flag_g);
-        result3 = bolt_tip_check(info, count, connect_package);
+        result3 = bolt_tip_check(info, count, connect_package, flag_nut);
         print_result_check(result1_2, result3);
     }
     free(info);
