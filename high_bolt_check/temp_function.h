@@ -33,6 +33,9 @@ extern int connect_package[7];
 // Флаг ГОСТ
 extern int flag_g;
 
+// Флаг гаек
+extern int flag_nut;
+
 // Массив под длины болтов 52644
 extern int bolt_length_52644[31];
 
@@ -49,6 +52,9 @@ void add_record(bolt info[], int number, unsigned int bolt_name, double washer_t
                 unsigned int thread_length_add2, double thread_pitch, double chamfer);
 int bolt_check_thread(bolt info[], int number, int arr[], int flag);
 int bolt_tip_check(bolt info[], int number, int *arr);
+int high_bolt_check_thread(bolt info[], int number, int arr[], int flag);
+void print_result_check(int res1_2, int res3);
 void print(bolt *arr, int size_struct);
+double print_data_thread_result(bolt info[], int number, int arr[], int flag, int i);
 
 #endif //HIGH_BOLT_CHECK_TEMP_FUNCTION_H

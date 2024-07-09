@@ -126,46 +126,15 @@ void print_input_data(int *arr, int flag)
 
 // Проверка 1: резьба в детали (превышение 0.5t крайней к гайке детали)
 // Проверка 2: резьба в шайбе (возможность закрутить гайку)
+// вариант только для двух гаек
 int bolt_check_thread(bolt info[], int number, int arr[], int flag)
 {
     double thread_result;
-    int fact_thread_length;
     for (int i = 0; i < number; i++)
     {
         if (info[i].bolt_name == arr[0])
         {
-            if (flag == 1)
-            {
-                if (arr[1] > 150)
-                    fact_thread_length = info[i].thread_length_add1;
-                else
-                    fact_thread_length = info[i].thread_length;
-
-                thread_result = arr[4] * info[i].washer_thickness + arr[2] + arr[3] - arr[1] + fact_thread_length;
-                printf("\t\t*** GOST DATA (52644-2006, 52645-2006, 52646-2006) ***\n");
-                printf("%20s%12s%12s%14s%10s\n", "WashThick", "NutHeight", "ThreadLen", "ThreadPitch", "Chamfer");
-                printf("%20.1f%12.1f%12d%14.1f%10.1f\n", info[i].washer_thickness, info[i].nut_height,
-                       fact_thread_length, info[i].thread_pitch, info[i].chamfer);
-            }
-            if (flag == 2)
-            {
-                if (arr[1] <= 125)
-                    fact_thread_length = info[i].thread_length;
-                else if (arr[1] > 125 && arr[1] <= 200)
-                    fact_thread_length = info[i].thread_length_add1;
-                else if (arr[1] > 200)
-                {
-                    if (info[i].thread_length_add2 == 0)
-                        fact_thread_length = info[i].thread_length_add1;
-                    else
-                        fact_thread_length = info[i].thread_length_add2;
-                }
-                thread_result = arr[4] * info[i].washer_thickness + arr[2] + arr[3] - arr[1] + fact_thread_length;
-                printf("\t\t*** GOST DATA (32484.3-2014, 32484.6-2014) ***\n");
-                printf("%20s%12s%12s%14s%10s\n", "WashThick", "NutHeight", "ThreadLen", "ThreadPitch", "Chamfer");
-                printf("%20.1f%12.1f%12d%14.1f%10.1f\n", info[i].washer_thickness, info[i].nut_height,
-                       fact_thread_length, info[i].thread_pitch, info[i].chamfer);
-            }
+            thread_result = print_data_thread_result(info, number, arr, flag, i);
             STR_LINE;
             printf("\t\t\t\t*** THREAD POSITION ***\n");
             if (thread_result > 0) // резьба в крайней детали
@@ -193,7 +162,39 @@ int bolt_check_thread(bolt info[], int number, int arr[], int flag)
     return 0;
 }
 
+// Проверка 1: под гайкой резьба имеет не менее одного витка
+// вариант только для 1 гайки
+int high_bolt_check_thread(bolt info[], int number, int arr[], int flag)
+{
+    double thread_result;
+    for (int i = 0; i < number; i++)
+    {
+        if (info[i].bolt_name == arr[0])
+        {
+            thread_result = print_data_thread_result(info, number, arr, flag, i);
+            STR_LINE;
+            printf("\t\t\t\t*** THREAD POSITION ***\n");
+            if (thread_result > 0) // резьба в крайней детали
+            {
+                printf("Thread in detail %.1f ", fabs(thread_result));
+                if (thread_result >= 2 * info[i].thread_pitch) // не менее двух витков с полным профилем
+                {
+                    printf("More than two turns with full profile");
+                    return 1;
+                }
+            } else if (thread_result < 0) // резьба в шайбе
+            {
+                printf("!!! Invalid thread position !!! Thread in washer %.1f ", fabs(thread_result));
+                return 2;
+            } else if (thread_result == 0) // резьба на границе деталей
+                printf("!!! Invalid thread position !!! Thread at the interface between the part and the washer");
+        }
+    }
+    return 0;
+}
+
 // Проверка 3: проверка длины конца болта (не менее одного полного витка резьбы + фаска)
+// для двух гаек
 int bolt_tip_check(bolt info[], int number, int *arr)
 {
     double bolt_tip;
@@ -217,3 +218,63 @@ int bolt_tip_check(bolt info[], int number, int *arr)
     return 0;
 }
 
+// Печать результатов проверки
+void print_result_check(int res1_2, int res3)
+{
+    printf("\n");
+    STR_LINE;
+    printf("\t\t\t*** BOLT LENGTH CHECK RESULT ***\n");
+    printf("\t%18s%18s%18s\n", "ThreadRequirement", "TighteningNut", "TipCheck");
+    if (res1_2 == 0 && res3 == 0)
+        printf("\t%18s%18s%18s\n", "YES", "YES", "YES");
+    else if (res1_2 == 0 && res3 == 1)
+        printf("\t%18s%18s%18s\n", "YES", "YES", "NO");
+    else if (res1_2 == 1 && res3 == 0)
+        printf("\t%18s%18s%18s\n", "NO", "YES", "YES");
+    else if (res1_2 == 1 && res3 == 1)
+        printf("\t%18s%18s%18s\n", "NO", "YES", "NO");
+    else if (res1_2 == 2 && res3 == 0)
+        printf("\t%18s%18s%18s\n", "YES", "NO", "YES");
+    else if (res1_2 == 2 && res3 == 1)
+        printf("\t%18s%18s%18s\n", "YES", "NO", "NO");
+    STR_LINE;
+}
+
+double print_data_thread_result(bolt info[], int number, int arr[], int flag, int i)
+{
+    double thread_result;
+    int fact_thread_length;
+    if (flag == 1)
+    {
+        if (arr[1] > 150)
+            fact_thread_length = info[i].thread_length_add1;
+        else
+            fact_thread_length = info[i].thread_length;
+
+        thread_result = arr[4] * info[i].washer_thickness + arr[2] + arr[3] - arr[1] + fact_thread_length;
+        printf("\t\t*** GOST DATA (52644-2006, 52645-2006, 52646-2006) ***\n");
+        printf("%20s%12s%12s%14s%10s\n", "WashThick", "NutHeight", "ThreadLen", "ThreadPitch", "Chamfer");
+        printf("%20.1f%12.1f%12d%14.1f%10.1f\n", info[i].washer_thickness, info[i].nut_height,
+               fact_thread_length, info[i].thread_pitch, info[i].chamfer);
+    }
+    if (flag == 2)
+    {
+        if (arr[1] <= 125)
+            fact_thread_length = info[i].thread_length;
+        else if (arr[1] > 125 && arr[1] <= 200)
+            fact_thread_length = info[i].thread_length_add1;
+        else if (arr[1] > 200)
+        {
+            if (info[i].thread_length_add2 == 0)
+                fact_thread_length = info[i].thread_length_add1;
+            else
+                fact_thread_length = info[i].thread_length_add2;
+        }
+        thread_result = arr[4] * info[i].washer_thickness + arr[2] + arr[3] - arr[1] + fact_thread_length;
+        printf("\t\t*** GOST DATA (32484.3-2014, 32484.6-2014) ***\n");
+        printf("%20s%12s%12s%14s%10s\n", "WashThick", "NutHeight", "ThreadLen", "ThreadPitch", "Chamfer");
+        printf("%20.1f%12.1f%12d%14.1f%10.1f\n", info[i].washer_thickness, info[i].nut_height,
+               fact_thread_length, info[i].thread_pitch, info[i].chamfer);
+    }
+    return thread_result;
+}

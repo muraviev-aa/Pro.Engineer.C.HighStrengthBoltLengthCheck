@@ -1,21 +1,18 @@
 #include <stdio.h>
 #include <unistd.h>
 #include "temp_function.h"
-
 #define SIZE 7 // число строк в файле
 
 int connect_package[7];
-
 int bolt_length_52644[31] = {40, 45, 50, 55, 60, 65, 70, 75, 80,
                              85, 90, 95, 100, 105, 110, 115, 120,
                              125, 130, 140, 150, 160, 170, 180,
                              190, 200, 220, 240, 260, 280, 300};
-
 int bolt_length_32484_3[23] = {40, 45, 50, 55, 60, 65, 70, 75,
                                80, 85, 90, 95, 100, 110, 120, 130,
                                140, 150, 160, 170, 180, 190, 200};
-
 int flag_g;
+int flag_nut;
 
 int main(int argc, char *argv[])
 {
@@ -25,6 +22,7 @@ int main(int argc, char *argv[])
     FILE *fptr;
     int rez, count;
     char *file_name;
+    int result1, result1_2, result3;
     // При запуске приложения без аргументов открывается справка
     if (argc == 1)
     {
@@ -74,6 +72,12 @@ int main(int argc, char *argv[])
             case 'n':
                 // Количество гаек
                 connect_package[6] = atoi(optarg);
+                if (connect_package[6] == 1)
+                    flag_nut = 1;
+                else if (connect_package[6] == 2)
+                    flag_nut = 2;
+                else
+                    printf("!!! Incorrect number of nuts entered !!!");
                 break;
             case '?':
                 printf("Error found !\n");
@@ -86,8 +90,14 @@ int main(int argc, char *argv[])
     count = read_data_file(&fptr, info);
     fclose(fptr);
     //print(info, count);
-    bolt_check_thread(info, count, connect_package, flag_g);
-    bolt_tip_check(info, count, connect_package);
+    if (flag_nut == 1)
+        result1 = high_bolt_check_thread(info, count, connect_package, flag_g);
+    else if (flag_nut == 2)
+    {
+        result1_2 = bolt_check_thread(info, count, connect_package, flag_g);
+        result3 = bolt_tip_check(info, count, connect_package);
+        print_result_check(result1_2, result3);
+    }
     free(info);
     return 0;
 }
