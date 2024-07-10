@@ -57,5 +57,6 @@ void print_result_check(int res1_2, int res3);
 void print(bolt *arr, int size_struct);
 double print_data_thread_result(bolt info[], int number, int arr[], int flag, int i);
 void print_high_bolt_result_check(int res1, int res3);
+void bolt_diam_check(int diam, int flag);
 
 #endif //HIGH_BOLT_CHECK_TEMP_FUNCTION_H

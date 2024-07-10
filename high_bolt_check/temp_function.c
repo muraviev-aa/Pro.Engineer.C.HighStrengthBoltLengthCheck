@@ -294,3 +294,24 @@ double print_data_thread_result(bolt info[], int number, int arr[], int flag, in
     }
     return thread_result;
 }
+
+// Проверка диаметра болта
+void bolt_diam_check(int diam, int flag)
+{
+    int count = 0;
+    if (flag == 1)
+    {
+        if (diam != 16 && diam != 20 && diam != 24 && diam != 30 && diam != 36 && diam != 42 && diam != 48)
+            count++;
+    } else if (flag == 2)
+    {
+        if (diam != 16 && diam != 20 && diam != 22 && diam != 24 && diam != 27 && diam != 30 && diam != 36)
+            count++;
+    }
+
+    if (count == 1)
+    {
+        puts("!!! Incorrect bolt diameter entered !!!\n");
+        exit(1);
+    }
+}

@@ -48,6 +48,7 @@ int main(int argc, char *argv[])
             case 'm':
                 // Диаметр резьбовой части болта
                 connect_package[0] = atoi(optarg);
+                bolt_diam_check(connect_package[0], flag_g);
                 break;
             case 'l':
                 // Длина болта [мм]
