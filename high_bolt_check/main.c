@@ -23,10 +23,12 @@ int main(int argc, char *argv[])
     int rez, count;
     char *file_name;
     int result1, result1_2, result3;
+    int flag = 0;
     // При запуске приложения без аргументов открывается справка
     if (argc == 1)
     {
         print_info();
+        flag = 1;
     }
 
     // Работа с аргументами командной строки
@@ -36,6 +38,7 @@ int main(int argc, char *argv[])
         {
             case 'h':
                 print_help();
+                flag = 1;
                 break;
             case 'f':
                 file_name = optarg;
@@ -86,7 +89,8 @@ int main(int argc, char *argv[])
         }
     }
 
-    print_input_data(connect_package, flag_g);
+    if (flag != 1)
+        print_input_data(connect_package, flag_g);
     open_file(&fptr, file_name);
     count = read_data_file(&fptr, info);
     fclose(fptr);
