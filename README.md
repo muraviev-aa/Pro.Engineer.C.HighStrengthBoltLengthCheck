@@ -8,7 +8,7 @@
 ### Консольное приложение "Проверка длины болта в соединениях с контролируемым натяжением"
 
 <p align="center">
-<img src="images/h_bolt.png" alt="drawing" width="150"/>
+<img src="images/h_bolt.png" alt="drawing" width="200"/>
 </p>
 
 #### Цель разработки:
