@@ -16,7 +16,7 @@ int flag_nut;
 
 int main(int argc, char *argv[])
 {
-    bolt *info = malloc(SIZE * sizeof(bolt));
+    bolt *info = (bolt *) malloc(SIZE * sizeof(bolt));
     if (!info)
         printf("Error while allocating memory!\n");
     FILE *fptr;
